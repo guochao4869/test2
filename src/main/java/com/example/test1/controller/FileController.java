@@ -1,5 +1,7 @@
 package com.example.test1.controller;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.example.test1.pojo.File;
 import com.example.test1.pojo.Result;
@@ -13,13 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+import java.net.http.HttpResponse;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * @author OuLa-test
@@ -55,13 +58,13 @@ public class FileController {
             File filePojo = new File();
             filePojo.setFilename(name);
             filePojo.setMd5("md5");
-            filePojo.setPath(path);
+            filePojo.setPath("http://192.168.10.241:8080" + path);
             filePojo.setName(path);
             boolean save = this.fileService.save(filePojo);
             if (!save) {
                 return new Result(false, "201");
             }
-            Result result = new Result(true, "200", path);
+            Result result = new Result(true, "200", filePojo.getPath());
             return result;
         }catch (Exception e) {
             e.printStackTrace();
@@ -72,5 +75,30 @@ public class FileController {
        /* FastdfsUtils fastdfsUtils = new FastdfsUtils();
         StorePath upload = fastdfsUtils.upload(file);
         return new Result(true, "200", upload);*/
+    }
+
+    @GetMapping("/getExcel")
+    public void getExcel(HttpServletResponse response){
+        try {
+            setExcelRespProp(response, "测试");
+            List<File> files = fileService.getBaseMapper().selectList(null);
+            EasyExcel.write(response.getOutputStream())
+                    .head(File.class)
+                    .excelType(ExcelTypeEnum.XLSX)
+                    .sheet("文件列表")
+                    .doWrite(files);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 设置请求响应
+     */
+    public void setExcelRespProp(HttpServletResponse response, String fileName) throws Exception{
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        String name = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + name + ".xlsx");
     }
 }

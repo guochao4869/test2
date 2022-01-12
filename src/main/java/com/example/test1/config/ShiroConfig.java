@@ -35,6 +35,7 @@ public class ShiroConfig {
         filterMap.put("/test/fileTest", "anon");
         filterMap.put("/test/getUser", "anon");
         filterMap.put("/druid/**", "anon");
+        filterMap.put("/file/**", "anon");
         // 其余的都需要校验权限,这个一定要放到最后，不然不生效
         filterMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
