@@ -3,6 +3,8 @@ package com.example.test1.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.example.test1.config.OperLog;
+import com.example.test1.exception.MyException;
 import com.example.test1.pojo.File;
 import com.example.test1.pojo.Result;
 import com.example.test1.service.FileService;
@@ -23,6 +25,7 @@ import java.net.URLEncoder;
 import java.net.http.HttpResponse;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author OuLa-test
@@ -71,10 +74,31 @@ public class FileController {
             log.error("上传失败");
             return new Result(false, "201");
         }
+    }
 
-       /* FastdfsUtils fastdfsUtils = new FastdfsUtils();
-        StorePath upload = fastdfsUtils.upload(file);
-        return new Result(true, "200", upload);*/
+    @GetMapping("/find")
+    public Result find(){
+        return this.fileService.find();
+    }
+
+    /**
+     * showdoc
+     * @catalog 测试文档/文件
+     * @title 测试日志
+     * @description 测试日志
+     * @method post
+     * @url file/logTest
+     * @return {"error_code":0,"data":{"uid":"1","username":"12154545","name":"吴系挂","groupid":2,"reg_time":"1436864169","last_login_time":"0"}}
+     * @return_param groupid int 用户组id
+     * @return_param name string 用户昵称
+     * @remark 这里是备注信息
+     * @number 99
+     */
+    @PostMapping("/logTest")
+    @OperLog(operModul = "测试日志")
+    public Result logTest(@RequestBody Map<String, Object> map){
+        //return new Result(true, "100");
+        throw new MyException("出错了");
     }
 
     @GetMapping("/getExcel")
@@ -92,8 +116,12 @@ public class FileController {
         }
     }
 
+
     /**
-     * 设置请求响应
+     * 设置响应头
+     * @param response
+     * @param fileName
+     * @throws Exception
      */
     public void setExcelRespProp(HttpServletResponse response, String fileName) throws Exception{
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

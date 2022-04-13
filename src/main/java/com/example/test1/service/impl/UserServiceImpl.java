@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.test1.mapper.EsUserMapper;
 import com.example.test1.mapper.UserMapper;
+import com.example.test1.pojo.File;
 import com.example.test1.pojo.Result;
 import com.example.test1.pojo.User;
 import com.example.test1.service.UserService;
@@ -16,8 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -86,6 +90,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity("http://127.0.0.1:9200/test/type1/" + user.getId(), user, String.class);
         log.info("执行结果:{}", stringResponseEntity.getBody());
         return new Result(true, "200", "成功");
+    }
+
+    public static void main(String[] args) {
+        File file = new File();
+        file.setId(1);
+        File file2 = new File();
+        file2.setId(2);
+        List<File> a = new ArrayList<>();
+        a.add(file);
+        a.add(file2);
+        List<Integer> collect = a.stream().map(p -> p.getId()).collect(Collectors.toList());
+        System.out.println(collect);
+        System.out.println("----------");
+        a.stream().forEach( p -> {
+            System.out.println(p);
+        });
     }
 
 }

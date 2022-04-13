@@ -6,4 +6,6 @@ import com.example.test1.pojo.Result;
  * @author gc
  */
 public interface FileService {
+
+    Result find();
 }

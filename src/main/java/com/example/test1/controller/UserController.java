@@ -68,7 +68,7 @@ public class UserController {
             }
         }catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, "校验失败");
+            return new Result(false, "您的登入信息已经过期");
         }
         String sub = (String) claims.get("sub");
         //添加用户认证信息
@@ -98,35 +98,6 @@ public class UserController {
     public Result getOneUser(@RequestParam String username) {
         return userService.getOneUser(username);
     }
-
-    @PostMapping("/liaotian")
-    public Result liaotian(@RequestBody Map<String, Object> map) {
-        String meg = (String) map.get("meg");
-        log.info("开始连接服务器");
-        try {
-            new com.example.test1.demo.client.ChatClient().startClient("service", meg);
-        }catch (Exception e) {
-            e.printStackTrace();
-            log.error("连接服务器出现异常");
-            return new Result(false, "201");
-        }
-        return new Result(true, "200");
-    }
-
-    @Async
-    @PostMapping("/service")
-    public Result service(@RequestBody Map<String, Object> map) {
-        log.info("开始启动服务器");
-        try {
-            new com.example.test1.demo.server.ChatServer().startServer();
-        }catch (Exception e) {
-            e.printStackTrace();
-            log.error("启动服务器出现异常");
-            return new Result(false, "201");
-        }
-        return new Result(true, "200");
-    }
-
 
     @PostMapping("/addUser")
     public Result addUser(@RequestBody(required = false) User user){

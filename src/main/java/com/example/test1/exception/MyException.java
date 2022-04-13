@@ -1,10 +1,9 @@
 package com.example.test1.exception;
 
 
-
 public class MyException extends RuntimeException{
 
-    public String msg;
+    public String msg = "出错了";
     public MyException() {
     }
 
