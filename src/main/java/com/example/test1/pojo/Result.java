@@ -13,17 +13,25 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Result implements Serializable {
     private Boolean result;
+    private Integer code;
     private String meg;
     private Object data;
 
-    public Result(Boolean result, String meg) {
+    public Result(Boolean result, Integer code, String meg) {
         this.result = result;
+        this.code = code;
         this.meg = meg;
     }
 
-    public Result(Boolean result, String meg, Object data) {
+    public Result(Boolean result, Integer code, String meg, Object data) {
         this.result = result;
+        this.code = code;
         this.meg = meg;
         this.data = data;
+    }
+
+    public Result(Boolean result, Integer code) {
+        this.result = result;
+        this.code = code;
     }
 }

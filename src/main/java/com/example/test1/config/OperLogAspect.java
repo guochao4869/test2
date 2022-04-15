@@ -96,7 +96,7 @@ public class OperLogAspect {
             // 返回值
             sysLog.setResult(JSONObject.toJSONString(result));
             sysLog.setType(1);
-            sysLog.setCode(Integer.parseInt(result.getMeg()));
+            sysLog.setCode(result.getCode());
             sysLog.setStartTime(new Date());
             // 获取用户的id
             String authorization = httpServletRequest.getHeader("Authorization");
@@ -156,6 +156,7 @@ public class OperLogAspect {
             sysLog.setExDesc(throwable.getClass().getName());
             sysLog.setExDetail(parExStr(throwable.getClass().getName(), throwable.getMessage(), throwable.getStackTrace()));
             sysLog.setResult(JSONObject.toJSONString(throwable.getMessage()));
+            //sysLog.setResult(JSONObject.toJSONString(result));
             sysLog.setType(2);
             sysLog.setStartTime(new Date());
             // 获取用户的id

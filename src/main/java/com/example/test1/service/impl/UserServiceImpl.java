@@ -39,14 +39,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User on = this.getOne(new QueryWrapper<User>().eq("username", user.getUsername())
                 .eq("password", user.getPassword()));
         if (ObjectUtils.isEmpty(on)) {
-            return new Result(false, "无");
+            return new Result(false, 201);
         }
         // 生成jwt令牌,默认1个小时
         try {
             String jwt = JwtUtil.createJWT(on.getId(), on.getUsername(), null);
-            return new Result(true, "成功", jwt);
+            return new Result(true, 100,"成功", jwt);
         }catch (Exception e) {
-            return new Result(false, "失败");
+            return new Result(false, 201,"失败");
         }
     }
 
@@ -72,9 +72,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 */
         User in = this.baseMapper.selectOne(new QueryWrapper<User>().eq("username", username).last("limit 1"));
         if (ObjectUtils.isEmpty(in)) {
-            return new Result(false, "无");
+            return new Result(false,201, "无");
         }
-        return new Result(true, "成功", in);
+        return new Result(true, 200, "成功", in);
     }
 
     @Override
@@ -82,14 +82,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setRole("user");
         boolean save = this.save(user);
         if (!save) {
-            return new Result(false, "201", "失败");
+            return new Result(false, 201, "失败");
         }
         HashMap<String, Object> map = new HashMap<>(1);
         // 同步es
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity("http://127.0.0.1:9200/test/type1/" + user.getId(), user, String.class);
         log.info("执行结果:{}", stringResponseEntity.getBody());
-        return new Result(true, "200", "成功");
+        return new Result(true, 200, "成功");
     }
 
     public static void main(String[] args) {

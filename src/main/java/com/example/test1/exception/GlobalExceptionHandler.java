@@ -34,10 +34,10 @@ public class GlobalExceptionHandler {
             //解析系统自定义异常
             MyException businessException = (MyException) e;
             String errorCode = businessException.getMessage();
-            return new Result(false, "201", errorCode);
+            return new Result(false, 201, errorCode);
         }
         //非自定义异常类型，定义为99999系统未知错误
         LOGGER.error("系统异常:",e);
-        return new Result(false, "99999");
+        return new Result(false, 9999, "系统异常");
     }
 }

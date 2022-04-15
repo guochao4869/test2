@@ -58,17 +58,17 @@ public class UserController {
     public Result check(HttpServletRequest httpServletRequest) throws Exception{
         String authorization = httpServletRequest.getHeader("Authorization");
         if (StringUtils.isEmpty(authorization)) {
-            return new Result(false, "您未登入");
+            return new Result(false, 201, "您未登入");
         }
         Claims claims = null;
         try {
             claims = JwtUtil.parseJWT(authorization);
             if (ObjectUtils.isEmpty(claims)) {
-                return new Result(false, "您的登入信息已经过期");
+                return new Result(false,201, "您的登入信息已经过期");
             }
         }catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, "您的登入信息已经过期");
+            return new Result(false,201,"您的登入信息已经过期");
         }
         String sub = (String) claims.get("sub");
         //添加用户认证信息
@@ -78,12 +78,12 @@ public class UserController {
                 sub);
         //进行验证，这里可以捕获异常，然后返回对应信息
         subject.login(usernamePasswordToken);
-        return new Result(true, "校验成功", claims);
+        return new Result(true, 201, "校验成功", claims);
     }
 
     @GetMapping("/notLogin")
     public Result notLogin() {
-        return new Result(false, "您未登入");
+        return new Result(false, 201, "您未登入");
     }
 
     @GetMapping("/getUser")

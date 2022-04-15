@@ -65,14 +65,14 @@ public class FileController {
             filePojo.setName(path);
             boolean save = this.fileService.save(filePojo);
             if (!save) {
-                return new Result(false, "201");
+                return new Result(false, 201);
             }
-            Result result = new Result(true, "200", filePojo.getPath());
+            Result result = new Result(true, 200, filePojo.getPath());
             return result;
         }catch (Exception e) {
             e.printStackTrace();
             log.error("上传失败");
-            return new Result(false, "201");
+            return new Result(false, 201);
         }
     }
 
@@ -97,8 +97,7 @@ public class FileController {
     @PostMapping("/logTest")
     @OperLog(operModul = "测试日志")
     public Result logTest(@RequestBody Map<String, Object> map){
-        //return new Result(true, "100");
-        throw new MyException("出错了");
+        return this.fileService.logTest();
     }
 
     @GetMapping("/getExcel")

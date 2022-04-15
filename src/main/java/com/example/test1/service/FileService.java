@@ -8,4 +8,6 @@ import com.example.test1.pojo.Result;
 public interface FileService {
 
     Result find();
+
+    Result logTest();
 }

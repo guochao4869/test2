@@ -7,6 +7,7 @@ import com.example.test1.mapper.FileMapper;
 import com.example.test1.pojo.File;
 import com.example.test1.pojo.Result;
 import com.example.test1.service.FileService;
+import com.example.test1.utils.JSONUtils;
 import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -37,6 +38,12 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     @Override
     public Result find() throws MyException {
         List<File> files = fileMapper.find();
-        return new Result(true, "1", files);
+        return new Result(true, 100, "成功", files);
+    }
+
+    @Override
+    public Result logTest() {
+        return new Result(true, 100, "成功");
+        //throw new MyException(JSONUtils.jsonMap("出错了啊", "201"));
     }
 }
